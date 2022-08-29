@@ -18,15 +18,3 @@ menu = do
   putStrLn "Opcion: "
   a<-getLine
   if a == 3 then putStrLn "Corre" else "Salta"
--- menu 1 = do
---   putStrLn "Generando Hidato..."
--- menu 2 = do
---   putStrLn "Resolviendo Hidato..."
--- menu 3 = do
---   putStrLn "Mostrando Hidatos..."
---   putStrLn sudoku1
---   putStrLn sudoku2
---   putStrLn sudoku3
--- menu 4 = 
-  
-

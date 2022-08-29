@@ -1,0 +1,25 @@
+2
+8 8
+4 6
+3 4
+xx 33 35 xx xx -- -- --
+xx xx 24 22 xx -- -- --
+xx xx xx 21 xx xx -- --
+xx 26 xx 13 40 11 -- --
+27 xx xx xx 09 xx 01 --
+-- -- xx xx 18 xx xx --
+-- -- -- -- xx 07 xx xx
+-- -- -- -- -- -- 05 xx
+
+8 8
+4 6
+3 4
+xxxx 0033 0035 xxxx xxxx ---- ---- ----
+xxxx xxxx 0024 0022 xxxx ---- ---- ----
+xxxx xxxx xxxx 0021 xxxx xxxx ---- ----
+xxxx 0026 xxxx 0013 0040 0011 ---- ----
+0027 xxxx xxxx xxxx 0009 xxxx 0001 ----
+---- ---- xxxx xxxx 0018 xxxx xxxx ----
+---- ---- ---- ---- xxxx 0007 xxxx xxxx
+---- ---- ---- ---- ---- ---- 0005 xxxx
+

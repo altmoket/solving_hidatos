@@ -1,4 +1,4 @@
-3
+7
 8 8
 4 6
 3 4
@@ -11,27 +11,63 @@ xx 26 xx 13 40 11 -- --
 -- -- -- -- xx 07 xx xx
 -- -- -- -- -- -- 05 xx
 
-8 8
+7 7
 4 6
 3 4
-xxx 033 035 xxx xxx --- --- ---
-xxx xxx 024 022 xxx --- --- ---
-xxx xxx xxx 021 xxx xxx --- ---
-xxx 026 xxx 013 040 011 --- ---
-027 xxx xxx xxx 009 xxx 001 ---
---- --- xxx xxx 018 xxx xxx ---
---- --- --- --- xxx 007 xxx xxx
---- --- --- --- --- --- 005 xxx
+--- xxx xxx xxx xxx xxx xxx
+xxx xxx xxx xxx xxx xxx xxx
+--- xxx xxx xxx xxx xxx xxx
+--- xxx xxx xxx 040 xxx xxx
+--- xxx xxx xxx xxx xxx 001
+--- xxx xxx xxx xxx xxx xxx
+--- --- --- --- xxx xxx xxx
 
-8 8
-4 6
+7 7
+0 0
 3 4
-xxxx 0033 0035 xxxx xxxx ---- ---- ----
-xxxx xxxx 0024 0022 xxxx ---- ---- ----
-xxxx xxxx xxxx 0021 xxxx xxxx ---- ----
-xxxx 0026 xxxx 0013 0040 0011 ---- ----
-0027 xxxx xxxx xxxx 0009 xxxx 0001 ----
----- ---- xxxx xxxx 0018 xxxx xxxx ----
----- ---- ---- ---- xxxx 0007 xxxx xxxx
----- ---- ---- ---- ---- ---- 0005 xxxx
+001 xxx xxx xxx xxx xxx xxx
+--- --- --- --- --- --- xxx
+--- --- --- --- xxx xxx xxx
+--- --- --- --- 020 xxx xxx
+--- --- --- --- --- xxx xxx
+--- --- --- --- --- xxx xxx
+--- --- --- --- --- xxx xxx
+
+5 5
+0 0
+2 2
+001 xxx xxx xxx xxx
+--- --- xxx xxx xxx
+--- xxx 016 xxx xxx
+--- --- --- xxx xxx
+--- --- --- xxx xxx
+
+7 7
+3 3
+3 2
+xxx xxx xxx xxx xxx xxx xxx
+xxx xxx xxx xxx --- xxx xxx
+xxx xxx xxx xxx xxx xxx xxx
+xxx xxx 045 002 xxx xxx xxx
+xxx xxx xxx xxx xxx xxx xxx
+--- xxx xxx xxx xxx xxx xxx
+--- --- --- xxx xxx xxx xxx
+
+5 5
+1 3
+3 3
+--- --- --- xxx xxx
+--- --- --- 001 xxx
+--- --- --- --- xxx
+--- --- --- 009 xxx
+--- --- --- xxx xxx
+
+5 6
+2 0
+2 3
+xx xx xx xx xx xx
+xx -- xx xx xx xx
+02 xx xx 26 xx xx
+-- -- xx xx xx xx
+-- -- xx xx xx xx
 

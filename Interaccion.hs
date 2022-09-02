@@ -2,16 +2,18 @@ module Interaccion (
   comenzar_ejecucion
 ) where
 import System.Process
-import FileOperations(mostrar_sudokus, seleccionar_sudoku, eliminar_sudoku)
+import FileOperations(agregar_sudoku, mostrar_sudokus, seleccionar_sudoku, eliminar_sudoku)
 import Tipos(Sudoku(..))
 import Grafo(solve)
+import Generador(comenzar_generacion)
+import Utils(to_int)
 
 clearScreen::IO()
 clearScreen = do
   system "clear"
   putStr "\ESC[2J"
 
-data Menu = Inicio | Sudokus Bool | Seleccion Int Sudoku | Resultado Int Sudoku Sudoku
+data Menu = Inicio | Sudokus Bool | Seleccion Int Sudoku | Resultado Int Sudoku Sudoku | Generacion Sudoku
 
 comenzar_ejecucion::IO()
 comenzar_ejecucion = mostrar Inicio
@@ -60,6 +62,21 @@ mostrar result@(Resultado _ sudokuOriginal resultado) = do
   formular_pregunta result
   opcion<-getLine
   ejecutar opcion result
+mostrar generacion@(Generacion _ ) = do
+  clearScreen
+  mostrar_encabezado
+  putStrLn "Generando Hidato ..."
+  (rows, cols, minValue, maxValue, cantDigitos) <- obtener_valores_generacion
+  let sudoku = comenzar_generacion rows cols minValue maxValue cantDigitos
+      resultado = solve sudoku
+  putStrLn "Sudoku Generado:"
+  putStrLn $ show sudoku
+  putStrLn "Resultado:"
+  putStr $ show resultado
+  mostrar_acciones generacion
+  formular_pregunta generacion
+  opcion <- getLine
+  ejecutar opcion (Generacion sudoku)
 
 mostrar_encabezado::IO()
 mostrar_encabezado = do
@@ -72,7 +89,6 @@ mostrar_acciones Inicio = do
   putStrLn "Opciones:"
   putStrLn "1 - Mostrar Hidatos"
   putStrLn "2 - Generar Hidatos"
-  putStrLn "3 - Resolver Hidatos"
   putStrLn "q - Salir"
 mostrar_acciones (Sudokus False) = do
   putStrLn "Opciones:"
@@ -94,6 +110,12 @@ mostrar_acciones (Resultado _ _ _) = do
   putStrLn "a - Volver atras"
   putStrLn "b - Volver al inicio"
   putStrLn "q - Salir"
+mostrar_acciones (Generacion _ )= do
+  putStrLn "Opciones:"
+  putStrLn "1 - Guardar"
+  putStrLn "a - Volver atras"
+  putStrLn "b - Volver al inicio"
+  putStrLn "q - Salir"
 
 
 formular_pregunta::Menu->IO()
@@ -103,12 +125,28 @@ formular_pregunta (Sudokus True) = do
 formular_pregunta _ = do
   putStrLn "Selecciona una de las opciones anteriores"
 
+obtener_valores_generacion = do
+  putStrLn "Introduce numero de filas"
+  lnRows <- getLine 
+  putStrLn "Introduce el numero de columnas"
+  lnCols <- getLine
+  putStrLn "Introduce el valor minimo"
+  lnMinValue <- getLine
+  putStrLn "Introduce el valor maximo"
+  lnMaxValue <- getLine
+  let (rows, cols) = (to_int lnRows, to_int lnCols)
+      lengthMinValue = length lnMinValue
+      lengthMaxValue = length lnMaxValue
+      longMin = length $ show $ rows * cols
+      digitos = max (max lengthMinValue lengthMaxValue) longMin
+      minValue = (replicate (digitos - lengthMinValue) '0') ++ lnMinValue
+      maxValue = (replicate (digitos - lengthMaxValue) '0') ++ lnMaxValue
+  return (rows, cols, minValue, maxValue, digitos)
 
 ejecutar::String->Menu->IO()
 ejecutar opcion Inicio 
   | opcion == "1" = mostrar $ Sudokus False
-  | opcion == "2" = putStrLn "BBBBB"
-  | opcion == "3" = putStrLn "CCCCC"
+  | opcion == "2" = mostrar $ Generacion Empty
   | opcion == "q" = return ()
   | otherwise = mostrar Inicio
 ejecutar opcion sudokus@(Sudokus False)
@@ -138,3 +176,12 @@ ejecutar opcion resultado@(Resultado index sudokuOriginal _)
   | opcion == "b" = mostrar $ Inicio
   | opcion == "q" = return ()
   | otherwise = mostrar resultado
+ejecutar opcion generacion@(Generacion sudoku)
+  | opcion == "1" = do
+      agregar_sudoku sudoku
+      mostrar Inicio
+  | opcion == "a" = mostrar generacion
+  | opcion == "b" = mostrar Inicio
+  | opcion == "q" = return ()
+  | otherwise = mostrar generacion
+

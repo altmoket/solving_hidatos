@@ -1,4 +1,4 @@
-module FileOperations(
+module Src.FileOperations(
   mostrar_sudokus,
   agregar_sudoku,
   eliminar_sudoku,
@@ -8,8 +8,8 @@ import System.IO
 import System.Directory
 import Data.List
 import Control.Monad
-import Tipos(Sudoku(..), Position(..))
-import Utils(get_sudoku_dimensions)
+import Src.Tipos(Sudoku(..), Position(..))
+import Src.Utils(get_sudoku_dimensions)
 
 import System.Process
 clearScreen::IO()

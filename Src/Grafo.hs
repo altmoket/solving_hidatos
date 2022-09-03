@@ -1,8 +1,8 @@
-module Grafo(
+module Src.Grafo(
   solve,
 ) where
-import Tipos(Position(..), Matrix, Sudoku(..))
-import Utils(is_valid_position
+import Src.Tipos(Position(..), Matrix, Sudoku(..))
+import Src.Utils(is_valid_position
             ,next_position
             ,generate_direction
             ,update_matrix

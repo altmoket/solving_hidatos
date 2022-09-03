@@ -1,14 +1,11 @@
-module Generador (
+module Src.Generador (
   comenzar_generacion
 )where
-import Ffi
-import Tipos(Sudoku(..),Position(..))
-import Utils(to_int, update_matrix, get_sudoku_dimensions)
-import Grafo(solve)
--- main::IO()
--- main = do
---   let sudoku = comenzar_generacion 7 8 "001" "040"
---   putStrLn $ show sudoku
+import Src.Ffi
+import Src.Tipos(Sudoku(..),Position(..))
+import Src.Utils(to_int, update_matrix, get_sudoku_dimensions)
+import Src.Grafo(solve)
+
 comenzar_generacion rows cols valorMinimo valorMaximo digitos
   | diferenciaValor > rows*cols = Empty
   | posMenor == posMayor = comenzar_generacion rows cols valorMinimo valorMaximo digitos
@@ -18,7 +15,6 @@ comenzar_generacion rows cols valorMinimo valorMaximo digitos
         posMenor = generar_posicion_aleatoria rows cols
         posMayor = generar_posicion_aleatoria rows cols
         generacion = generar_sudoku (rows,cols) posMenor posMayor valorMinimo valorMaximo digitos
-        
 
 generar_posicion_aleatoria::Int->Int->Position
 generar_posicion_aleatoria rows cols = 

@@ -1,4 +1,4 @@
-module Utils(
+module Src.Utils(
   to_int,
   to_string,
   generate_direction,
@@ -7,7 +7,7 @@ module Utils(
   next_position,
   is_valid_position
 ) where
-import Tipos(Position(..), Sudoku(..), Matrix, Direction)
+import Src.Tipos(Position(..), Sudoku(..), Matrix, Direction)
 
 to_int::String->Int
 to_int value

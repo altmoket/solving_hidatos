@@ -1,4 +1,4 @@
-module Tipos (
+module Src.Tipos (
   Position(..),
   Sudoku(..),
   Matrix,

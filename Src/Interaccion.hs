@@ -1,12 +1,12 @@
-module Interaccion (
+module Src.Interaccion (
   comenzar_ejecucion
 ) where
 import System.Process
-import FileOperations(agregar_sudoku, mostrar_sudokus, seleccionar_sudoku, eliminar_sudoku)
-import Tipos(Sudoku(..))
-import Grafo(solve)
-import Generador(comenzar_generacion)
-import Utils(to_int)
+import Src.FileOperations(agregar_sudoku, mostrar_sudokus, seleccionar_sudoku, eliminar_sudoku)
+import Src.Tipos(Sudoku(..))
+import Src.Grafo(solve)
+import Src.Generador(comenzar_generacion)
+import Src.Utils(to_int)
 
 clearScreen::IO()
 clearScreen = do

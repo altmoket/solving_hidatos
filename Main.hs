@@ -1,3 +1,3 @@
 module Main where
-import Interaccion(comenzar_ejecucion)
+import Src.Interaccion(comenzar_ejecucion)
 main = comenzar_ejecucion

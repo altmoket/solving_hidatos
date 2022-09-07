@@ -1,5 +1,7 @@
 module Src.Graph(
   solve,
+  solve_inverse,
+  unique_solution
 ) where
 import Src.Types(Position(..), Matrix, Sudoku(..))
 import Src.Utils(is_valid_position
@@ -10,21 +12,31 @@ import Src.Utils(is_valid_position
             ,to_string
             ,get_sudoku_dimensions)
 
+unique_solution::Sudoku->Bool
+unique_solution Empty = False
+unique_solution sudoku = (solve sudoku) == (solve_inverse sudoku)
+
+solve_inverse::Sudoku->Sudoku
+solve_inverse Empty = Empty
+solve_inverse sudoku = 
+  let (isFilledSudoku,result) = dfs sudoku [8,7..0]
+  in if isFilledSudoku then result else Empty
+
 solve::Sudoku->Sudoku
 solve Empty = Empty 
 solve sudoku = 
-  let (isFilledSudoku, result) = dfs sudoku
+  let (isFilledSudoku, result) = dfs sudoku [0..8]
   in if isFilledSudoku then result else Empty
 
-dfs::Sudoku->(Bool, Sudoku)
-dfs Empty = (False, Empty)
-dfs sudoku@(World matrix currentValuePosition maxValuePosition)
+dfs::Sudoku->[Int]->(Bool, Sudoku)
+dfs Empty _ = (False, Empty)
+dfs sudoku@(World matrix currentValuePosition maxValuePosition) order
   | currentValuePosition == maxValuePosition = (True, sudoku)
   | otherwise = result
-  where result = any_adapted_to_sudoku (dfs_main_step sudoku) [0..8]
+  where result = any_adapted_to_sudoku (dfs_main_step sudoku order) order
 
-dfs_main_step::Sudoku->Int->(Bool, Sudoku)
-dfs_main_step sudoku@(World matrix currentValuePosition maxValuePosition) n = 
+dfs_main_step::Sudoku->[Int]->Int->(Bool, Sudoku)
+dfs_main_step sudoku@(World matrix currentValuePosition maxValuePosition) order n = 
   if (is_valid_position nextPosition sudoku nextValue)
     then result
   else 
@@ -36,7 +48,7 @@ dfs_main_step sudoku@(World matrix currentValuePosition maxValuePosition) n =
         cifras = length $ matrix !! 0 !! 0
         nextValue = to_string ((to_int $ matrix !! i !! j) + 1) (cifras)
         matrixChanged = update_matrix matrix nextPosition nextValue
-        result = dfs (World matrixChanged nextPosition maxValuePosition)
+        result = dfs (World matrixChanged nextPosition maxValuePosition) order
 
 any_adapted_to_sudoku::(a->(Bool,Sudoku))->[a]->(Bool,Sudoku)
 any_adapted_to_sudoku _ [] = (False, Empty)

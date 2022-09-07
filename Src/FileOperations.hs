@@ -11,6 +11,7 @@ import Control.Monad
 import Src.Types(Sudoku(..), Position(..))
 import Src.Utils(get_sudoku_dimensions)
 
+hidatos_number::IO Int
 hidatos_number = do
   contents <- readFile "hidatos.txt"
   let numero = read ((lines contents)!!0) :: Int
@@ -24,8 +25,8 @@ all_matrix = do
       f i = 
         let Just index = elemIndex i posicionesCulminacion
             salto = if index == 0 then 3 else (posicionesCulminacion!!(index-1) + 1) + 3
-            resultado = drop salto (take i resultWithoutFirstLine)
-        in resultado
+            result = drop salto (take i resultWithoutFirstLine)
+        in result
       matricesSudoku = map f posicionesCulminacion
   return matricesSudoku
 
@@ -38,8 +39,8 @@ all_positions = do
         | index == 0 = 
           let lineOfFirstPosition = linesWithoutFirstPosition !! 1
               lineOfSecondPosition = linesWithoutFirstPosition !! 2
-              [a1,b1] = split ' ' lineOfFirstPosition
-              [a2,b2] = split ' ' lineOfSecondPosition
+              [a1,b1] = words lineOfFirstPosition
+              [a2,b2] = words lineOfSecondPosition
               x1 = read a1
               y1 = read b1 
               x2 = read a2
@@ -49,8 +50,8 @@ all_positions = do
           let realIndexAnterior = emptyPositions !! (index - 1)
               lineOfFirstPosition = linesWithoutFirstPosition !! (realIndexAnterior + 2)
               lineOfSecondPosition = linesWithoutFirstPosition !! (realIndexAnterior + 3)
-              [a1,b1] = split ' ' lineOfFirstPosition
-              [a2,b2] = split ' ' lineOfSecondPosition
+              [a1,b1] = words lineOfFirstPosition
+              [a2,b2] = words lineOfSecondPosition
               x1 = read a1
               y1 = read b1 
               x2 = read a2
@@ -86,14 +87,14 @@ add_hidato sudoku@(World matrix minValuePos maxValuePos) = do
   -- Numero de sudokus
   numero <- hidatos_number
   let contenido = lines contents
-      resultado = unlines $ drop 1 contenido
+      result = unlines $ drop 1 contenido
       sudokuAAgregar = concatMap (++ "\n") $ map (intercalate " ") matrix
       posicionMenor = show (x minValuePos) ++ " " ++ show (y minValuePos)
       posicionMayor = show (x maxValuePos) ++ " " ++ show (y maxValuePos)
       (rows, cols) = get_sudoku_dimensions sudoku
       dimensiones = show rows ++ " " ++ show cols
   hPutStrLn tempHandle (show $ numero + 1)
-  hPutStr tempHandle resultado
+  hPutStr tempHandle result
   hPutStrLn tempHandle dimensiones
   hPutStrLn tempHandle posicionMenor
   hPutStrLn tempHandle posicionMayor
@@ -118,28 +119,21 @@ delete_hidato index = do
         sup = if index == 0 then (posicionesCulminacion!!index)+1 else (posicionesCulminacion!!index)
         r1 = take inf resultWithoutFirstLine
         r2 = drop sup resultWithoutFirstLine
-        resultado = r1 ++ r2
+        result = r1 ++ r2
 
     hPutStrLn tempHandle (show $ numero - 1)
-    hPutStr tempHandle (unlines resultado)
+    hPutStr tempHandle (unlines result)
 
     removeFile "hidatos.txt"
     renameFile tempName "hidatos.txt"
     hClose tempHandle
-
-split separador [] = []
-split separador lista = 
-  let indexResult = elemIndex separador lista
-      Just index = if indexResult == Nothing then Just (-1) else indexResult
-      result = (take index lista):(split separador (drop (index+1) lista))
-  in if index == -1 then [lista] else result
 
 select_hidato index = do
   numero <- hidatos_number
   if index < 0 || index >= numero then return (Empty) else do
     matrices <- all_matrix
     allPositions <- all_positions
-    let matrix = map (split ' ') (matrices!!index)
+    let matrix = map words (matrices!!index)
         positions = allPositions!!index
         minPos = fst positions
         maxPos = snd positions

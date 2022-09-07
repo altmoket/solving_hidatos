@@ -5,6 +5,7 @@ module Src.Utils(
   get_sudoku_dimensions,
   update_matrix,
   next_position,
+  delete_position,
   is_valid_position
 ) where
 import Src.Types(Position(..), Sudoku(..), Matrix, Direction)
@@ -71,3 +72,7 @@ update_matrix matrix (Position x y) value =
       parteInicial = take x matrix
       parteFinal = drop (x+1) matrix
   in parteInicial ++ [filaModificada] ++ parteFinal
+
+delete_position::[a]->Int->[a]
+delete_position [] _ = []
+delete_position lista index = (take index lista) ++ (drop (index + 1) lista)

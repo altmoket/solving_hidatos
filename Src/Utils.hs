@@ -16,25 +16,13 @@ to_int value
   | otherwise = read value :: Int
 
 to_string::Int->Int->String
-to_string number cifras = result number cifras
-  where result number 3 
-          | number == -1 = "---"
-          | number == 0 = "xxx"
-          | number < 10 = "00" ++ show number
-          | number < 100 = "0" ++ show number
-          | otherwise = show number
-        result number 2
-          | number == -1 = "--"
-          | number == 0 = "xx"
-          | number < 10 = "0" ++ show number
-          | otherwise = show number
-        result number 4
-          | number == -1  = "----"
-          | number == 0   = "xxxx"
-          | number < 10   = "000" ++ show number
-          | number < 100  = "00" ++ show number
-          | number < 1000 = "0" ++ show number
-          | otherwise = show number
+to_string number cifras 
+  | number == -1 = replicate cifras '-'
+  | number == 0  = replicate cifras 'x'
+  | otherwise = resultado 
+  where 
+    cantDigitos = length $ show number
+    resultado = (replicate (cifras-cantDigitos) '0') ++ show number
 
 get_sudoku_dimensions::Sudoku->(Int,Int)
 get_sudoku_dimensions = get_dimensions

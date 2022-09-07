@@ -1,5 +1,5 @@
 module Src.Generador (
-  comenzar_generacion
+  start_generation
 )where
 import Src.Ffi
 import Src.Tipos(Sudoku(..),Position(..),Matrix)
@@ -7,11 +7,11 @@ import Src.Utils(to_string, to_int, update_matrix, get_sudoku_dimensions)
 import Src.Grafo(solve)
 import Data.List
 
-comenzar_generacion rows cols valorMinimo valorMaximo digitos
+start_generation rows cols valorMinimo valorMaximo digitos
   | diferenciaValor > rows*cols = Empty
-  | posMenor == posMayor = comenzar_generacion rows cols valorMinimo valorMaximo digitos
+  | posMenor == posMayor = start_generation rows cols valorMinimo valorMaximo digitos
   | generacion /= Empty = generacion
-  | otherwise = comenzar_generacion rows cols valorMinimo valorMaximo digitos
+  | otherwise = start_generation rows cols valorMinimo valorMaximo digitos
   where diferenciaValor = (to_int valorMaximo) - (to_int valorMinimo)
         posMenor = generar_posicion_aleatoria rows cols
         posMayor = generar_posicion_aleatoria rows cols

@@ -1,116 +1,116 @@
 module Src.Interaccion (
-  comenzar_ejecucion
+  start_execution
 ) where
 import System.Process
-import Src.FileOperations(agregar_sudoku, mostrar_sudokus, seleccionar_sudoku, eliminar_sudoku)
+import Src.FileOperations(add_hidato, show_hidatos, select_hidato, delete_hidato)
 import Src.Tipos(Sudoku(..))
 import Src.Grafo(solve)
-import Src.Generador(comenzar_generacion)
+import Src.Generador(start_generation)
 import Src.Utils(to_int)
 
-clearScreen::IO()
-clearScreen = do
+clear_screen::IO()
+clear_screen = do
   system "clear"
   putStr "\ESC[2J"
 
-data Menu = Inicio | Sudokus Bool | Seleccion Int Sudoku | Resultado Int Sudoku Sudoku | Generacion Sudoku
+data Menu = Inicio | Consulta Bool | Seleccion Int Sudoku | Resultado Int Sudoku Sudoku | Generacion Sudoku
 
-comenzar_ejecucion::IO()
-comenzar_ejecucion = mostrar Inicio
+start_execution::IO()
+start_execution= mostrar Inicio
 
 mostrar::Menu->IO()
 mostrar Inicio = do
-  clearScreen
-  mostrar_encabezado
-  mostrar_acciones Inicio
-  formular_pregunta Inicio
-  opcion<-getLine
-  ejecutar opcion Inicio
-mostrar sudokus@(Sudokus False) = do
-  clearScreen
-  mostrar_encabezado
-  mostrar_sudokus
-  mostrar_acciones sudokus
-  formular_pregunta sudokus
-  opcion<-getLine
-  ejecutar opcion sudokus
-mostrar sudokus@(Sudokus True) = do
-  clearScreen
-  mostrar_encabezado
-  mostrar_sudokus
-  mostrar_acciones sudokus
-  formular_pregunta sudokus
-  opcion<-getLine
-  ejecutar opcion sudokus
+  clear_screen
+  show_header
+  show_actions Inicio
+  get_question Inicio
+  option<-getLine
+  execute option Inicio
+mostrar consulta@(Consulta False) = do
+  clear_screen
+  show_header
+  show_hidatos
+  show_actions consulta
+  get_question consulta
+  option<-getLine
+  execute option consulta
+mostrar consulta@(Consulta True) = do
+  clear_screen
+  show_header
+  show_hidatos
+  show_actions consulta
+  get_question consulta
+  option<-getLine
+  execute option consulta
 mostrar seleccion@(Seleccion index sudoku) = do
-  clearScreen
-  mostrar_encabezado
+  clear_screen
+  show_header
   putStrLn $ "Hidato " ++ show (index + 1)
   putStr $ show sudoku
-  mostrar_acciones seleccion
-  formular_pregunta seleccion
-  opcion <- getLine
-  ejecutar opcion seleccion
+  show_actions seleccion
+  get_question seleccion
+  option <- getLine
+  execute option seleccion
 mostrar result@(Resultado _ sudokuOriginal resultado) = do
-  clearScreen
-  mostrar_encabezado
+  clear_screen
+  show_header
   putStrLn $ "Hidato original"
   putStr $ show sudokuOriginal
   putStrLn $ "Hidato resuelto"
   putStr $ show resultado
-  mostrar_acciones result
-  formular_pregunta result
-  opcion<-getLine
-  ejecutar opcion result
+  show_actions result
+  get_question result
+  option<-getLine
+  execute option result
 mostrar generacion@(Generacion _ ) = do
-  clearScreen
-  mostrar_encabezado
+  clear_screen
+  show_header
   putStrLn "Generando Hidato ..."
-  (rows, cols, minValue, maxValue, cantDigitos) <- obtener_valores_generacion
-  let sudoku = comenzar_generacion rows cols minValue maxValue cantDigitos
+  (rows, cols, minValue, maxValue, cantDigitos) <- get_values_from_input
+  let sudoku = start_generation rows cols minValue maxValue cantDigitos
       resultado = solve sudoku
-  putStrLn "Sudoku Generado:"
+  putStrLn "Hidato Generado:"
   putStrLn $ show sudoku
   putStrLn "Resultado:"
   putStr $ show resultado
-  mostrar_acciones generacion
-  formular_pregunta generacion
-  opcion <- getLine
-  ejecutar opcion (Generacion sudoku)
+  show_actions generacion
+  get_question generacion
+  option <- getLine
+  execute option (Generacion sudoku)
 
-mostrar_encabezado::IO()
-mostrar_encabezado = do
+show_header::IO()
+show_header = do
   putStrLn "+++++++++++++++++++++++++++++++++++++++++++"
   putStrLn "Gestor de Hidatos"
   putStrLn "+++++++++++++++++++++++++++++++++++++++++++"
 
-mostrar_acciones::Menu->IO()
-mostrar_acciones Inicio = do
+show_actions::Menu->IO()
+show_actions Inicio = do
   putStrLn "Opciones:"
   putStrLn "1 - Mostrar Hidatos"
   putStrLn "2 - Generar Hidatos"
   putStrLn "q - Salir"
-mostrar_acciones (Sudokus False) = do
+show_actions (Consulta False) = do
   putStrLn "Opciones:"
   putStrLn "1 - Seleccionar Hidato"
   putStrLn "a - Volver atras"
   putStrLn "q - Salir"
-mostrar_acciones (Sudokus True) = do
+show_actions (Consulta True) = do
   putStrLn "Opciones:"
   putStrLn "a - Volver atras"
   putStrLn "q - Salir"
-mostrar_acciones (Seleccion _ _) = do
+show_actions (Seleccion _ _) = do
   putStrLn "Opciones:"
   putStrLn "1 - Resolver"
   putStrLn "2 - Eliminar"
   putStrLn "a - Volver atras"
   putStrLn "q - Salir"
-mostrar_acciones (Resultado _ _ _) = do
+show_actions (Resultado _ _ _) = do
   putStrLn "Opciones:"
   putStrLn "a - Volver atras"
   putStrLn "b - Volver al inicio"
   putStrLn "q - Salir"
-mostrar_acciones (Generacion _ )= do
+show_actions (Generacion _ )= do
   putStrLn "Opciones:"
   putStrLn "1 - Guardar"
   putStrLn "a - Volver atras"
@@ -118,14 +118,13 @@ mostrar_acciones (Generacion _ )= do
   putStrLn "q - Salir"
 
 
-formular_pregunta::Menu->IO()
-formular_pregunta (Sudokus True) = do
+get_question::Menu->IO()
+get_question (Consulta True) = do
   putStrLn "Introduce el numero del sudoku de su eleccion o alguna de las opciones anteriores"
-
-formular_pregunta _ = do
+get_question _ = do
   putStrLn "Selecciona una de las opciones anteriores"
 
-obtener_valores_generacion = do
+get_values_from_input = do
   putStrLn "Introduce numero de filas"
   lnRows <- getLine 
   putStrLn "Introduce el numero de columnas"
@@ -143,45 +142,45 @@ obtener_valores_generacion = do
       maxValue = (replicate (digitos - lengthMaxValue) '0') ++ lnMaxValue
   return (rows, cols, minValue, maxValue, digitos)
 
-ejecutar::String->Menu->IO()
-ejecutar opcion Inicio 
-  | opcion == "1" = mostrar $ Sudokus False
-  | opcion == "2" = mostrar $ Generacion Empty
-  | opcion == "q" = return ()
+execute::String->Menu->IO()
+execute option Inicio 
+  | option == "1" = mostrar $ Consulta False
+  | option == "2" = mostrar $ Generacion Empty
+  | option == "q" = return ()
   | otherwise = mostrar Inicio
-ejecutar opcion sudokus@(Sudokus False)
-  | opcion == "1" = mostrar (Sudokus True)
-  | opcion == "a" = mostrar Inicio
-  | opcion == "q" = return ()
-  | otherwise = mostrar sudokus
-ejecutar opcion sudokus@(Sudokus True)
-  | opcion == "q" = return ()
-  | opcion == "a" = mostrar (Sudokus False)
+execute option consulta@(Consulta False)
+  | option == "1" = mostrar (Consulta True)
+  | option == "a" = mostrar Inicio
+  | option == "q" = return ()
+  | otherwise = mostrar consulta
+execute option consulta@(Consulta True)
+  | option == "q" = return ()
+  | option == "a" = mostrar (Consulta False)
   | otherwise = do
-    let index = read opcion - 1
-    sudokuSeleccionado <- seleccionar_sudoku index
-    if sudokuSeleccionado == Empty then (mostrar (Sudokus False)) else mostrar (Seleccion index sudokuSeleccionado)
-ejecutar opcion seleccion@(Seleccion index sudoku)
-  | opcion == "1" = do
+    let index = read option - 1
+    sudokuSeleccionado <- select_hidato index
+    if sudokuSeleccionado == Empty then (mostrar (Consulta False)) else mostrar (Seleccion index sudokuSeleccionado)
+execute option seleccion@(Seleccion index sudoku)
+  | option == "1" = do
       let resultado = solve sudoku
       mostrar $ Resultado index sudoku resultado
-  | opcion == "2" = do
-      eliminar_sudoku index
-      mostrar $ Sudokus False
-  | opcion == "a" = mostrar $ Sudokus False
-  | opcion == "q" = return ()
-  | otherwise = mostrar $ Sudokus False
-ejecutar opcion resultado@(Resultado index sudokuOriginal _)
-  | opcion == "a" = mostrar $ Seleccion index sudokuOriginal
-  | opcion == "b" = mostrar $ Inicio
-  | opcion == "q" = return ()
+  | option == "2" = do
+      delete_hidato index
+      mostrar $ Consulta False
+  | option == "a" = mostrar $ Consulta False
+  | option == "q" = return ()
+  | otherwise = mostrar $ Consulta False
+execute option resultado@(Resultado index sudokuOriginal _)
+  | option == "a" = mostrar $ Seleccion index sudokuOriginal
+  | option == "b" = mostrar $ Inicio
+  | option == "q" = return ()
   | otherwise = mostrar resultado
-ejecutar opcion generacion@(Generacion sudoku)
-  | opcion == "1" = do
-      agregar_sudoku sudoku
+execute option generacion@(Generacion sudoku)
+  | option == "1" = do
+      add_hidato sudoku
       mostrar Inicio
-  | opcion == "a" = mostrar generacion
-  | opcion == "b" = mostrar Inicio
-  | opcion == "q" = return ()
+  | option == "a" = mostrar generacion
+  | option == "b" = mostrar Inicio
+  | option == "q" = return ()
   | otherwise = mostrar generacion
 

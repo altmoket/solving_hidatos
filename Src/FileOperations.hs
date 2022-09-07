@@ -1,8 +1,8 @@
 module Src.FileOperations(
-  mostrar_sudokus,
-  agregar_sudoku,
-  eliminar_sudoku,
-  seleccionar_sudoku
+  show_hidatos,
+  add_hidato,
+  delete_hidato,
+  select_hidato
 ) where
 import System.IO
 import System.Directory
@@ -11,13 +11,7 @@ import Control.Monad
 import Src.Tipos(Sudoku(..), Position(..))
 import Src.Utils(get_sudoku_dimensions)
 
-import System.Process
-clearScreen::IO()
-clearScreen = do
-  system "clear"
-  putStr "\ESC[2J"
-
-cantidad_sudokus = do
+hidatos_number = do
   contents <- readFile "hidatos.txt"
   let numero = read ((lines contents)!!0) :: Int
   return numero
@@ -66,12 +60,12 @@ all_positions = do
   return result
   
 
-mostrar_sudokus = do
+show_hidatos = do
   handle <- openFile "hidatos.txt" ReadMode
   contents <- hGetContents handle
   
   putStrLn "Listado de sudokus"
-  numeroDeSudokus <- cantidad_sudokus
+  numeroDeSudokus <- hidatos_number
   matricesSudoku <- all_matrix
 
   putStrLn $ "Cantidad: " ++ show numeroDeSudokus
@@ -85,12 +79,12 @@ mostrar_sudokus = do
   
   hClose handle
 
-agregar_sudoku sudoku@(World matrix minValuePos maxValuePos) = do
+add_hidato sudoku@(World matrix minValuePos maxValuePos) = do
   contents <- readFile "hidatos.txt"
   (tempName,tempHandle) <- openTempFile "." "temp"
 
   -- Numero de sudokus
-  numero <- cantidad_sudokus
+  numero <- hidatos_number
   let contenido = lines contents
       resultado = unlines $ drop 1 contenido
       sudokuAAgregar = concatMap (++ "\n") $ map (intercalate " ") matrix
@@ -108,10 +102,10 @@ agregar_sudoku sudoku@(World matrix minValuePos maxValuePos) = do
   removeFile "hidatos.txt"
   renameFile tempName "hidatos.txt"
   hClose tempHandle
-agregar_sudoku _ = do return ()
+add_hidato _ = do return ()
 
-eliminar_sudoku index = do
-  numero <- cantidad_sudokus
+delete_hidato index = do
+  numero <- hidatos_number
   if index < 0 || index >= numero then return () else do
     contents <- readFile "hidatos.txt"
     (tempName,tempHandle) <- openTempFile "." "temp"
@@ -140,8 +134,8 @@ split separador lista =
       result = (take index lista):(split separador (drop (index+1) lista))
   in if index == -1 then [lista] else result
 
-seleccionar_sudoku index = do
-  numero <- cantidad_sudokus
+select_hidato index = do
+  numero <- hidatos_number
   if index < 0 || index >= numero then return (Empty) else do
     matrices <- all_matrix
     allPositions <- all_positions

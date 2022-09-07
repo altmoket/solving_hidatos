@@ -8,7 +8,7 @@ import System.IO
 import System.Directory
 import Data.List
 import Control.Monad
-import Src.Tipos(Sudoku(..), Position(..))
+import Src.Types(Sudoku(..), Position(..))
 import Src.Utils(get_sudoku_dimensions)
 
 hidatos_number = do

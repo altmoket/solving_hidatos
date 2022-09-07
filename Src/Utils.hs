@@ -7,7 +7,7 @@ module Src.Utils(
   next_position,
   is_valid_position
 ) where
-import Src.Tipos(Position(..), Sudoku(..), Matrix, Direction)
+import Src.Types(Position(..), Sudoku(..), Matrix, Direction)
 
 to_int::String->Int
 to_int value

@@ -1,7 +1,7 @@
-module Src.Grafo(
+module Src.Graph(
   solve,
 ) where
-import Src.Tipos(Position(..), Matrix, Sudoku(..))
+import Src.Types(Position(..), Matrix, Sudoku(..))
 import Src.Utils(is_valid_position
             ,next_position
             ,generate_direction

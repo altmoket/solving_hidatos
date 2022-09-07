@@ -1,11 +1,11 @@
-module Src.Interaccion (
+module Src.Interaction (
   start_execution
 ) where
 import System.Process
 import Src.FileOperations(add_hidato, show_hidatos, select_hidato, delete_hidato)
-import Src.Tipos(Sudoku(..))
-import Src.Grafo(solve)
-import Src.Generador(start_generation)
+import Src.Types(Sudoku(..))
+import Src.Graph(solve)
+import Src.Generator(start_generation)
 import Src.Utils(to_int)
 
 clear_screen::IO()

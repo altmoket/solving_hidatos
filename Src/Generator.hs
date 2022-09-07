@@ -1,10 +1,10 @@
-module Src.Generador (
+module Src.Generator (
   start_generation
 )where
 import Src.Ffi
-import Src.Tipos(Sudoku(..),Position(..),Matrix)
+import Src.Types(Sudoku(..),Position(..),Matrix)
 import Src.Utils(to_string, to_int, update_matrix, get_sudoku_dimensions)
-import Src.Grafo(solve)
+import Src.Graph(solve)
 import Data.List
 
 start_generation rows cols valorMinimo valorMaximo digitos

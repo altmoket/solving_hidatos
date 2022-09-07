@@ -3,7 +3,7 @@ module Src.Tests(
   sudoku2,
   sudoku3
 )where
-import Src.Tipos(Sudoku(..), Position(..))
+import Src.Types(Sudoku(..), Position(..))
 
 matrixsudoku1 = [["xxx","033","035","xxx","xxx","---","---","---"],
                  ["xxx","xxx","024","022","xxx","---","---","---"],

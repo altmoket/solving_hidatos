@@ -31,7 +31,6 @@ generate_hidato (rows,cols) minPos@(Position x1 y1) maxPos@(Position x2 y2) minV
       
         valorObstaculo = to_string (-1) cellLength
         valorLibre = to_string 0 cellLength
-        minimo = to_int
 
         cantidadObstaculos = rows * cols - (to_int maxValueStr)
         
@@ -41,7 +40,6 @@ generate_hidato (rows,cols) minPos@(Position x1 y1) maxPos@(Position x2 y2) minV
         solucion = solve sudoku
         matrixSolucion = if solucion == Empty then [[]] else (matrix solucion) 
 
-        -- matrixInicial = remplazar_casillas_no_visitadas sudoku solucion cellLength
         positions = get_cell_positions tableroObstaculizado valorLibre
         cantidadValores = get_random_number 0 (length positions)
         matrixModificada = colocar_valores tableroObstaculizado matrixSolucion positions cantidadValores
